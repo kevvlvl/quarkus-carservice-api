@@ -1,2 +1,2 @@
-greeting:
-  message: "hello"
+app:
+  port: 8082
