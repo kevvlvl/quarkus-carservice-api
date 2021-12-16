@@ -6,6 +6,5 @@ public class Model {
 
     private Make make;
     private String model;
-    private String fabricationOrigin;
     private BigDecimal msrp;
 }
