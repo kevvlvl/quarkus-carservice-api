@@ -21,3 +21,15 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# Gradle temp files
+.gradle/7.3/fileHashes/
+.gradle/7.3/executionHistory
+.gradle/7.3/buildOutputCleanup
+.gradle/7.3/checksums
+
+# compiled
+build
+
+# IntelliJ specific
+.idea
