@@ -25,7 +25,8 @@ hs_err_pid*
 # Gradle temp files
 .gradle/7.3/fileHashes/
 .gradle/7.3/executionHistory
-.gradle/7.3/buildOutputCleanup
+.gradle/7.3/fileChanges
+.gradle/buildOutputCleanup
 .gradle/7.3/checksums
 
 # compiled
