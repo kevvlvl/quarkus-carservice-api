@@ -9,6 +9,16 @@ docker build -t cars-postgres -f postgres.dockerfile .
 docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=carsdb --name cars-postgres cars-postgres
 docker container ls
 ```
+2. Run the API in a mode that allows live coding (very cool by the way!)
+```
+./gradlew quarkusDev
+```
+
+3Run some Curls to validate entities are loaded
+```
+curl localhost:8081/make
+curl localhost:8081/make/models
+```
 
 ## Quarkus Original Docs
 ### Running the application in dev mode

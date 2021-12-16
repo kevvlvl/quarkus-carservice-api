@@ -1,12 +1,12 @@
 package com.kevvlvl.quarkus.service;
 
-import com.kevvlvl.quarkus.model.Make;
-import com.kevvlvl.quarkus.model.Model;
+import com.kevvlvl.quarkus.dto.MakeDto;
+import com.kevvlvl.quarkus.dto.ModelDto;
 
 import java.util.List;
 
 public interface MakesService {
 
-    List<Make> getMakes();
-    List<Model> getModels();
+    List<MakeDto> getMakes();
+    List<ModelDto> getModels();
 }
