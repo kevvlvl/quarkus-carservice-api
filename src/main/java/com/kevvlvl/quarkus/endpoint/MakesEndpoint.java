@@ -2,8 +2,6 @@ package com.kevvlvl.quarkus.endpoint;
 
 import com.kevvlvl.quarkus.dto.MakeDto;
 import com.kevvlvl.quarkus.dto.ModelDto;
-import com.kevvlvl.quarkus.model.Make;
-import com.kevvlvl.quarkus.model.Model;
 import com.kevvlvl.quarkus.service.MakesService;
 
 import javax.ws.rs.GET;

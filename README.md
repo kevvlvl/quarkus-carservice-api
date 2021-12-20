@@ -1,20 +1,23 @@
 # quarkus-carservice-api Project
 
+### Test stack
+
+- Quarkus and Quarkus DevServices (for dev & test DB using testcontainers)
+- Hibernate ORM using Panache entities
+- Flyway (for DB initialization)
+- Tests using Junit 5/Jupiter
+- Gradle package mgmt
+
+### Getting started
+
 API built using Quarkus and PostgreSQL as its backing DB
 
-1. Run Postgresql
-```shell script
-cd docker
-docker build -t cars-postgres -f postgres.dockerfile .
-docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=carsdb --name cars-postgres cars-postgres
-docker container ls
-```
-2. Run the API in a mode that allows live coding (very cool by the way!)
+1. Run the API in a mode that allows live coding (very cool by the way!)
 ```
 ./gradlew quarkusDev
 ```
 
-3Run some Curls to validate entities are loaded
+2. Run some Curls to validate entities are loaded
 ```
 curl localhost:8081/make
 curl localhost:8081/make/models

@@ -1,9 +1,0 @@
-quarkus:
-  datasource:
-    db-kind: postgresql
-    username: postgres
-    password: carsdb
-    jdbc:
-      url: jdbc:postgresql://localhost:5432/postgres
-  http:
-    port: 8081
