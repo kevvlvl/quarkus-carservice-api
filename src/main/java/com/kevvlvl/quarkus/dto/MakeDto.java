@@ -12,6 +12,9 @@ public class MakeDto {
         this.countryOfOrigin = countryOfOrigin;
     }
 
+    public MakeDto() {
+    }
+
     public int getId() {
         return id;
     }
