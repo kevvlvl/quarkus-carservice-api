@@ -4,6 +4,7 @@
 
 - Quarkus and Quarkus DevServices (for dev & test DB using testcontainers)
 - Hibernate ORM using Panache entities
+- Redis caching
 - Flyway (for DB initialization)
 - Tests using Junit 5/Jupiter
 - Gradle package mgmt
