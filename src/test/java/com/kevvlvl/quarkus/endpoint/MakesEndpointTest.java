@@ -4,7 +4,6 @@ import com.kevvlvl.quarkus.dto.MakeDto;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.path.json.JsonPath;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -26,5 +25,8 @@ public class MakesEndpointTest {
                 .extract().body().jsonPath();
 
         List<MakeDto> makes = jsonPath.getList("", MakeDto.class);
+
+        // add AssertJ and assertions
+        // TODO: service with mock repository
     }
 }

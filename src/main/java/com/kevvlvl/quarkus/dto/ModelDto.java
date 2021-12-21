@@ -14,6 +14,9 @@ public class ModelDto {
         this.msrp = msrp;
     }
 
+    public ModelDto() {
+    }
+
     public int getId() {
         return id;
     }
