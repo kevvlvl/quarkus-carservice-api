@@ -3,11 +3,11 @@ package com.kevvlvl.quarkus.redis;
 import io.quarkus.redis.client.RedisClient;
 import io.vertx.redis.client.Response;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.List;
 
-@Singleton
+@ApplicationScoped
 public class RedisService {
 
     private final RedisClient redisClient;
