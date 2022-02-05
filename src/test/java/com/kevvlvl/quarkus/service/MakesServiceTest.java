@@ -1,5 +1,6 @@
 package com.kevvlvl.quarkus.service;
 
+import com.kevvlvl.quarkus.ApiTestProfile;
 import com.kevvlvl.quarkus.dto.MakeDto;
 import com.kevvlvl.quarkus.dto.ModelDto;
 import com.kevvlvl.quarkus.model.Make;
@@ -9,6 +10,7 @@ import com.kevvlvl.quarkus.repository.MakeRepository;
 import com.kevvlvl.quarkus.repository.ModelRepository;
 import io.quarkus.redis.client.RedisClient;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.anyString;
 
 @QuarkusTest
+@TestProfile(ApiTestProfile.class)
 public class MakesServiceTest {
 
     @Inject
