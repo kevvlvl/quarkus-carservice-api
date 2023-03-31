@@ -9,6 +9,12 @@
 - Tests using Junit 5/Jupiter
 - Gradle package mgmt
 
+### Prerequisites
+
+Install Podman and follow these steps so that the testcontainers use podman instead of docker:
+
+https://quarkus.io/blog/quarkus-devservices-testcontainers-podman/
+
 ### Getting started
 
 API built using Quarkus and PostgreSQL as its backing DB

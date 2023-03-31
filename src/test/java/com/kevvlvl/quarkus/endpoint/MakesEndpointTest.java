@@ -1,5 +1,6 @@
 package com.kevvlvl.quarkus.endpoint;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.kevvlvl.quarkus.ApiTestProfile;
 import com.kevvlvl.quarkus.MakeStub;
 import com.kevvlvl.quarkus.dto.MakeDto;
