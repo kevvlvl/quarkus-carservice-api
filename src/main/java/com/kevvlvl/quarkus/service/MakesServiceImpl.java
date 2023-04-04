@@ -7,86 +7,87 @@ import com.kevvlvl.quarkus.dto.MakeDto;
 import com.kevvlvl.quarkus.dto.ModelDto;
 import com.kevvlvl.quarkus.model.Make;
 import com.kevvlvl.quarkus.model.Model;
-import com.kevvlvl.quarkus.redis.RedisService;
 import com.kevvlvl.quarkus.repository.MakeRepository;
 import com.kevvlvl.quarkus.repository.ModelRepository;
+import io.quarkus.redis.datasource.ReactiveRedisDataSource;
+import io.quarkus.redis.datasource.RedisDataSource;
+import io.quarkus.redis.datasource.keys.ReactiveKeyCommands;
+import io.quarkus.redis.datasource.value.ValueCommands;
 import org.jboss.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-@Singleton
+@ApplicationScoped
 public class MakesServiceImpl implements MakesService {
 
     private static final Logger LOG = Logger.getLogger(MakesServiceImpl.class);
+
     private static final String REDIS_MODELS_KEY = "car-models";
     private static final String REDIS_MAKES_KEY = "car-makes";
 
-    private final RedisService redisService;
+    private ReactiveKeyCommands<String> keys;
+    private ValueCommands<String, String> valueCmd;
     private final MakeRepository makeRepository;
     private final ModelRepository modelRepository;
 
     @Inject
-    public MakesServiceImpl(RedisService redisService,
+    public MakesServiceImpl(RedisDataSource redis,
+                            ReactiveRedisDataSource reactive,
                             MakeRepository makeRepository,
                             ModelRepository modelRepository) {
-        this.redisService = redisService;
+
+        keys = reactive.key();
+        valueCmd = redis.value(String.class);
         this.makeRepository = makeRepository;
         this.modelRepository = modelRepository;
     }
 
     @Override
-    public List<MakeDto> getMakes() {
+    public List<MakeDto> getMakes() throws JsonProcessingException {
 
-        List<MakeDto> makeDtos = null;
+        String val = valueCmd.get(REDIS_MAKES_KEY);
+        List<MakeDto> list = deserializeFromRedis(val, MakeDto.class);
 
-        try {
-            makeDtos = deserializeFromRedis(redisService.get(REDIS_MAKES_KEY), MakeDto.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        if(makeDtos == null || makeDtos.isEmpty()) {
+        if (list == null || list.isEmpty()) {
 
             LOG.info("Makes not found in Redis. Query DB");
 
             List<Make> makes = makeRepository.listAll();
 
-            makeDtos = makes.stream()
+            list = makes.stream()
                     .map(m -> new MakeDto(m.getId(), m.getName(), m.getCountryOfOrigin()))
                     .collect(Collectors.toList());
 
-            writeRedis(REDIS_MAKES_KEY, makeDtos);
+            writeRedis(REDIS_MAKES_KEY, list);
         }
 
-        return makeDtos;
+        return list;
     }
 
     @Override
-    public List<ModelDto> getModels() {
+    public List<ModelDto> getModels() throws JsonProcessingException {
 
-        List<ModelDto> modelDtos = null;
-        try {
-            modelDtos = deserializeFromRedis(redisService.get(REDIS_MODELS_KEY), ModelDto.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        String val = valueCmd.get(REDIS_MODELS_KEY);
+        List<ModelDto> list = deserializeFromRedis(val, ModelDto.class);
 
-        if(modelDtos == null || modelDtos.isEmpty()) {
+        if (list == null || list.isEmpty()) {
 
             LOG.info("Models not found in Redis. Query DB");
 
             List<Model> models = modelRepository.listAll();
-            modelDtos = models.stream()
-                    .map(m -> new ModelDto(m.getId(), m.getModel(), m.getMsrp()))
-                    .collect(Collectors.toList());
 
-            writeRedis(REDIS_MODELS_KEY, modelDtos);
+            list = models.stream()
+                        .map(m -> new ModelDto(m.getId(), m.getModel(), m.getMsrp()))
+                        .collect(Collectors.toList());
+
+            writeRedis(REDIS_MODELS_KEY, list);
         }
 
-        return modelDtos;
+        return list;
     }
 
     private void writeRedis(String key, List<?> data) {
@@ -95,7 +96,7 @@ public class MakesServiceImpl implements MakesService {
 
         try {
             LOG.info("About to write to Redis");
-            redisService.set(key, mapper.writeValueAsString(data));
+            this.valueCmd.setex(key, TimeUnit.MINUTES.toSeconds(5), mapper.writeValueAsString(data));
             LOG.info("Successfully wrote to Redis");
 
         } catch (JsonProcessingException e) {
@@ -103,18 +104,17 @@ public class MakesServiceImpl implements MakesService {
         }
     }
 
-    private static<T> List<T> deserializeFromRedis(String str, Class<T> dataClass) throws JsonProcessingException {
+    private static <T> List<T> deserializeFromRedis(String str, Class<T> dataClass) throws JsonProcessingException {
 
         LOG.info("Deserialize following string = " + str);
 
-        if(str != null && !str.isBlank()) {
+        if (str != null && !str.isBlank()) {
             ObjectMapper mapper = new ObjectMapper();
             JavaType type = mapper.getTypeFactory().constructParametricType(List.class, dataClass);
 
             LOG.info("Deserialized data from Redis");
             return mapper.readValue(str, type);
-        }
-        else {
+        } else {
             return null;
         }
     }

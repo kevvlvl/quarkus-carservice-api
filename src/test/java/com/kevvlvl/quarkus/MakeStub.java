@@ -31,7 +31,7 @@ public class MakeStub {
                 new MakeDto(2, "Honda", "Japan"));
     }
 
-    public static List<Model> getModelStub() {
+    public static List<Model> getModels() {
 
         Model model1 = new Model();
         model1.setId(888);
